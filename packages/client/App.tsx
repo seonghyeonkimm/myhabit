@@ -1,8 +1,9 @@
 import 'react-native-gesture-handler';
-import React, { useState, useEffect } from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
-import { NavigationContainer, useFocusEffect, useIsFocused } from '@react-navigation/native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { Button, ThemeProvider, Icon } from 'react-native-elements';
 
 
 function HomeScreen({ navigation }) {
@@ -13,34 +14,19 @@ function HomeScreen({ navigation }) {
     ),
   });
 
-  const isFocused = useIsFocused();
-  console.log('isFocused: ', isFocused);
+  // const isFocused = useIsFocused();
+  // useFocusEffect(() => {
+  //   // focus comes here
 
-  useFocusEffect(() => {
-    console.log('hook focus');
-
-    return () => {
-      console.log('hook blur');
-    }
-  });
-
-  useEffect(() => {
-    const unsubscribeFocus = navigation.addListener('focus', () => {
-      console.log('focus');
-      // Screen was focused
-      // Do something
-    });
-    const unsubscribeBlur = navigation.addListener('blur', () => {
-      console.log('blur');
-    });
-    return () => {
-      unsubscribeBlur();
-      unsubscribeFocus();
-    }
-  }, [navigation]);
+  //   return () => {
+  //     // blur comes here
+  //   }
+  // });
 
   return (
     <View style={styles.container}>
+      <Icon name='rowing' />
+      <Icon name='g-translate' color='#00aced' />
       <Text>count: {count}</Text>
       <Button
         title="Go to Details"
@@ -129,19 +115,27 @@ function MainStackScreen() {
   );
 }
 
+const theme = {
+  Button: {
+    raised: true,
+  },
+};
+
 export default function App() {
   return (
-    <NavigationContainer onStateChange={(state) => console.log(state)}>
-      <RootStack.Navigator mode="modal" initialRouteName="Main">
-        <RootStack.Screen
-          name="Main"
-          component={MainStackScreen}
-          options={{ headerShown: false }}
-        />
-        <RootStack.Screen name="MyModal" component={ModalScreen} options={{ title: '모달' }} />
-        {/* <Stack.Screen name="Tabs" component={TabScreen} options={{ title: '탭 화면' }} /> */}
-      </RootStack.Navigator>
-    </NavigationContainer>
+    <ThemeProvider theme={theme}>
+      <NavigationContainer>
+        <RootStack.Navigator mode="modal" initialRouteName="Main">
+          <RootStack.Screen
+            name="Main"
+            component={MainStackScreen}
+            options={{ headerShown: false }}
+          />
+          <RootStack.Screen name="MyModal" component={ModalScreen} options={{ title: '모달' }} />
+          {/* <Stack.Screen name="Tabs" component={TabScreen} options={{ title: '탭 화면' }} /> */}
+        </RootStack.Navigator>
+      </NavigationContainer>
+    </ThemeProvider>
   );
 }
 
